@@ -1,4 +1,4 @@
-ction Recognition for UCF 101 
+Action Recognition for UCF 101
 
 Final project for my Computer Vision class, to recognize class of a given video based. So far limited work has been done in using temporal features for feature detection, my aim is to **either** compare the latest state of the art tools for action recognition or to implement a vanilla solution. 
 
