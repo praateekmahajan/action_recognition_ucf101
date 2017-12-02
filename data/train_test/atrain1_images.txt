@@ -1,0 +1,5 @@
+ApplyEyeMakeup/v_ApplyEyeMakeup_g08_c01 20 1
+ApplyEyeMakeup/v_ApplyEyeMakeup_g08_c02 20 1
+ApplyEyeMakeup/v_ApplyEyeMakeup_g08_c03 25 1
+ApplyEyeMakeup/v_ApplyEyeMakeup_g08_c04 38 1
+ApplyEyeMakeup/v_ApplyEyeMakeup_g08_c05 46 1
