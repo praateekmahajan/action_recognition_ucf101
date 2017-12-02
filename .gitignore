@@ -3,3 +3,4 @@ data/UCF101_images/
 .ipynb_c*
 .nfs*
 *.rar
+*.floyd*
