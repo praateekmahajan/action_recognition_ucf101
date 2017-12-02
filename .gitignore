@@ -4,3 +4,4 @@ data/UCF101_images/
 .nfs*
 *.rar
 *.floyd*
+*.pyc
