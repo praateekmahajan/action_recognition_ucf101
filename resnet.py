@@ -37,7 +37,7 @@ class CNNGRU(nn.Module):
         self.linear = nn.Linear(
          in_features=self.hidden_layers, out_features=self.classes)
 
-     def forward(self, x):
+    def forward(self, x):
         n, t = x.size(0), x.size(1)
         x = x.view(t * n, x.size(2), x.size(3), x.size(4))
         conv_output = self.conv(x)  # convolve allframes
