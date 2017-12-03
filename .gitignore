@@ -6,3 +6,4 @@ data/UCF101_images/
 *.floyd*
 *.zip
 *.pyc
+.*
