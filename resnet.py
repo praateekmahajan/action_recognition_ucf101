@@ -29,7 +29,7 @@ class CNNGRU(nn.Module):
 
         self.conv = torchvision.models.resnet18(pretrained=True)
         for param in self.conv.parameters():
-        param.requires_grad = False
+            param.requires_grad = False
 
         self.lstm = nn.LSTM(self.input_dim, self.hidden_layers, self.rnn_layers)
         self.gru = nn.GRU(self.input_dim, self.hidden_layers, self.rnn_layers, dropout=0.2)
