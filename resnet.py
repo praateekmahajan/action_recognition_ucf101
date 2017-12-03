@@ -112,10 +112,13 @@ def train_model(model, criterion, optimizer, scheduler, dataloader, batch_size, 
 
                 # zero the parameter gradients
                 optimizer.zero_grad()
-                if i % 100 == 99:
-                    print('{:.0f} videos in {:.0f}m {:.0f}s'.format(100 * float(batch_size),
+                if i % 400 == 99:
+                    print('{:.0f} videos in {:.0f}m {:.0f}s'.format(400 * float(batch_size),
                                                                     (time.time() - start) // 60,
                                                                     (time.time() - start) % 60))
+                    temp_model = model.state_dict()
+                    torch.save(temp_model, "latest_model_0.pt")
+
                     start = time.time()
                 # forward
                 outputs = model(inputs)
@@ -140,7 +143,8 @@ def train_model(model, criterion, optimizer, scheduler, dataloader, batch_size, 
             if phase == 'validation' and epoch_acc > best_acc:
                 best_acc = epoch_acc
                 best_model_wts = model.state_dict()
-		torch.save(best_model_wts, "best_model_" + str(best_acc) + ".pt")
+                torch.save(best_model_wts, "best_model_" + str(best_acc) + ".pt")
+
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(
         time_elapsed // 60, time_elapsed % 60))
@@ -151,3 +155,4 @@ def train_model(model, criterion, optimizer, scheduler, dataloader, batch_size, 
     return model
 
 model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, dataloader, 6, use_gpu, num_epochs=25)
+torch.save(model_ft.state_dict(), "latest_model.pt")
