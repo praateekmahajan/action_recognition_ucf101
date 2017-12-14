@@ -32,7 +32,7 @@ class CNNGRU(nn.Module):
         self.input_dim = 1000
         self.hidden_layers = 512
         self.rnn_layers = 2
-        self.classes = 101
+        self.classes = 100
         #         self.sample_rate = 12
 
         self.conv = torchvision.models.resnet18(pretrained=True)
@@ -40,7 +40,7 @@ class CNNGRU(nn.Module):
             param.requires_grad = False
 
         self.lstm = nn.LSTM(self.input_dim, self.hidden_layers, self.rnn_layers)
-        self.gru = nn.GRU(self.input_dim, self.hidden_layers, self.rnn_layers, dropout=0.2)
+        self.gru = nn.GRU(self.input_dim, self.hidden_layers, self.rnn_layers, dropout=0.4)
 
         self.linear = nn.Linear(
          in_features=self.hidden_layers, out_features=self.classes)
