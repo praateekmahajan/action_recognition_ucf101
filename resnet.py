@@ -9,10 +9,18 @@ import numpy as np
 import torchvision
 import time
 from data_loader import DataClass
+import argparse
 
 use_gpu = True and torch.cuda.is_available()
 FOLDER_DATASET = "../data/"
 IMAGE_DATASET = "UCF101_images/"
+
+parser = argparse.ArgumentParser(description="This is the main test harness for your models.")
+parser.add_argument("--resume", type=str, required=False, help="(TEST MODE) Load weights file")
+
+args = parser.parse_args()
+
+
 
 dataloader = {'train' : DataClass(FOLDER_DATASET, IMAGE_DATASET, "train1.txt"),
 			  'validation' : DataClass(FOLDER_DATASET, IMAGE_DATASET, "validation1.txt")}
@@ -52,6 +60,8 @@ class CNNGRU(nn.Module):
 model_ft = CNNGRU()
 if use_gpu:
     model_ft = model_ft.cuda()
+    if args.resume is not None:
+        model_ft.load_state_dict(torch.load(args.resume))
 
 criterion = nn.CrossEntropyLoss()
 
@@ -109,6 +119,9 @@ def train_model(model, criterion, optimizer, scheduler, dataloader, batch_size, 
                     print('{:.0f} videos in {:.0f}m {:.0f}s'.format(100 * float(batch_size),
                                                                     (time.time() - start) // 60,
                                                                     (time.time() - start) % 60))
+                    temp_model = model.state_dict()
+                    torch.save(temp_model, "latest_model_0.pt")
+
                     start = time.time()
                 # forward
                 outputs = model(inputs)
@@ -133,7 +146,8 @@ def train_model(model, criterion, optimizer, scheduler, dataloader, batch_size, 
             if phase == 'validation' and epoch_acc > best_acc:
                 best_acc = epoch_acc
                 best_model_wts = model.state_dict()
-		torch.save(best_model_wts, "best_model_" + str(best_acc) + ".pt")
+                torch.save(best_model_wts, "best_model_" + str(best_acc) + ".pt")
+
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(
         time_elapsed // 60, time_elapsed % 60))
@@ -143,4 +157,5 @@ def train_model(model, criterion, optimizer, scheduler, dataloader, batch_size, 
     model.load_state_dict(best_model_wts)
     return model
 
-model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, dataloader, 4, use_gpu, num_epochs=25)
+model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, dataloader, 6, use_gpu, num_epochs=25)
+torch.save(model_ft.state_dict(), "latest_model.pt")
