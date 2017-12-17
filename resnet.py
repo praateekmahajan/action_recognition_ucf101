@@ -112,8 +112,11 @@ def train_model(model, criterion, optimizer, scheduler, dataloader, batch_size, 
 
                 # zero the parameter gradients
                 optimizer.zero_grad()
-                if i % 400 == 99:
-                    print('{:.0f} videos in {:.0f}m {:.0f}s'.format(400 * float(batch_size),
+                if i % 100 == 99:
+	            best_model_wts = model.state_dict()
+        	    torch.save(best_model_wts, "best_model_" + str(0) + ".pt")
+
+                    print('{:.0f} videos in {:.0f}m {:.0f}s'.format(100 * float(batch_size),
                                                                     (time.time() - start) // 60,
                                                                     (time.time() - start) % 60))
                     temp_model = model.state_dict()
