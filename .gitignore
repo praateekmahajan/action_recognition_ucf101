@@ -1,5 +1,6 @@
 data/UCF101/
 data/UCF101_images/
+data/resize
 .ipynb_c*
 .nfs*
 *.rar

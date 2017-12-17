@@ -21,26 +21,32 @@ class DataClass():
     # Generate image files for the given batch of videos
     # return batch_size * longest_sequence * channels * height * width
     def generatebatch(self, meta_batch):
-        CHANNELS = 3
+
         folder = self.data_folder + self.image_folder
         batch_len = len(meta_batch)
 
-        maximum_video_length = meta_batch[:,1].astype(int).max()
-        
-        new_batch = np.zeros((batch_len, maximum_video_length, CHANNELS,self.height, self.width))
-        
+        maximum_video_length = meta_batch[:,1].astype(int).max()        
+        arr = []
         for batch_index, file in enumerate(meta_batch):
+            
             filename = file[0]
             sequence_len = int(file[1])
             # generate transformation here if you want to
-            for i in range(maximum_video_length - sequence_len, maximum_video_length): #pad the beginning
-                index = i - maximum_video_length + sequence_len
-                image = cv2.imread(folder + filename + "_" + str(index) + ".jpg")
-                #apply transformation here if you want to
+            current_image = []
+            for i in range(0, sequence_len): #pad the beginning
+                image = cv2.imread(folder + filename + "_" + str(i) + ".jpg")                
+                # apply transformation here if you want to
+#                 image = cv2.resize(image, (267,200), interpolation = cv2.INTER_AREA)
+
                 image = image.transpose(2,0,1)
-                new_batch[batch_index][i] = image           
-        return new_batch
-        
+                current_image.append(image)
+            
+            #repeat image/reflection
+            current_image = np.tile(current_image, (int(np.ceil(maximum_video_length/float(sequence_len))),1,1,1))
+            
+            #add it to the batch_array
+            arr.append(current_image[:maximum_video_length])            
+        return np.asarray(arr)        
         
     # Get a batch of given batch size
     def getbatch(self, batchsize):
